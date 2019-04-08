@@ -143,6 +143,14 @@ class SncRedisExtension extends Extension
             unset($client['options']['replication']);
         }
 
+        if ($client['options']['service'] && method_exists($container, 'resolveEnvPlaceholders')) {
+            $client['options']['service'] = $container->resolveEnvPlaceholders($client['options']['service'], true);
+        }
+
+        if (!$client['options']['service']) {
+            unset($client['options']['replication']);
+        }
+
         // predis connection parameters have been renamed in v0.8
         $client['options']['async_connect'] = $client['options']['connection_async'];
         $client['options']['timeout'] = $client['options']['connection_timeout'];
